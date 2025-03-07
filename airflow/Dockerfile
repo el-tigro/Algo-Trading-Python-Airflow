@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.11-slim
 LABEL maintainer="Puckel_"
 
 # Never prompt the user for choices on installation/configuration of packages
@@ -6,13 +6,13 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV TERM linux
 
 # Airflow
-ARG AIRFLOW_VERSION=2.0.1
+ARG AIRFLOW_VERSION=2.7.0
 ARG AIRFLOW_USER_HOME=/usr/local/airflow
 ENV AIRFLOW_HOME=${AIRFLOW_USER_HOME}
 ARG AIRFLOW_DEPS=""
 ARG PYTHON_DEPS=""
-ARG PYTHON_VERSION=3.8
-ARG CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-3.8.txt"
+ARG PYTHON_VERSION=3.11
+ARG CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-2.7.0/constraints-3.8.txt"
 
 # Define ru_RU.
 ENV LANGUAGE ru_RU.UTF-8
@@ -35,6 +35,8 @@ ARG BUILD_DEPS=" \
     unixodbc-dev \
 "
 
+RUN apt update && apt install -y pkg-config
+
 RUN set -ex \
     && apt-get update -yqq \
     && apt-get upgrade -yqq \
@@ -46,7 +48,7 @@ RUN set -ex \
         apt-utils \
         curl \
         rsync \
-        netcat \
+        netcat-traditional \
         locales \
         gnupg2 \
     && sed -i 's/^# ru_RU.UTF-8 UTF-8$/ru_RU.UTF-8 UTF-8/g' /etc/locale.gen \
@@ -58,7 +60,7 @@ RUN set -ex \
     && pip install pyOpenSSL \
     && pip install ndg-httpsclient \
     && pip install pyodbc \
-    && pip install tinvest \
+    && pip install tinkoff-investments \
     && pip install psycopg2 \
     && pip install pyasn1 \
     && pip install pymssql \

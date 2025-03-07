@@ -1,4 +1,5 @@
 #!/bin/sh
+echo "Starting Entrypoint"
 
 airflow db init
 
